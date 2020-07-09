@@ -11,7 +11,7 @@ const {
 
 router.get('/', getAll);
 router.post('/', validate(courseSchema), createOne);
-router.put('/', validate(courseSchema), updateOne);
-router.delete('/:id', deleteOne);
+router.put('/:_id', validate(courseSchema), updateOne);
+router.delete('/:_id', deleteOne);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const {
 
 router.get('/', getAll);
 router.post('/', validate(studentSchema), createOne);
-router.put('/', validate(studentSchema), updateOne);
-router.delete('/:id', deleteOne);
+router.put('/:_id', validate(studentSchema), updateOne);
+router.delete('/:_id', deleteOne);
 
 module.exports = router;
