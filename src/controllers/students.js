@@ -8,17 +8,17 @@ module.exports = {
     res.send(students);
   },
   createOne: async (req, res) => {
-    const { firstName, lastName, age, courses } = req.body;
-    const newStuden = new studentsModel({ firstName, lastName, age, courses });
+    const { firstName, lastName, age } = req.body;
+    const newStuden = new studentsModel({ firstName, lastName, age });
     await newStuden.save();
     res.send(`${newStuden.firstName} saved`);
   },
   updateOne: async (req, res) => {
     const { _id } = req.params;
-    const { firstName, lastName, age, courses } = req.body;
+    const { firstName, lastName, age } = req.body;
     const updatedStudent = await studentsModel.findByIdAndUpdate(
       _id,
-      { $set: { firstName: firstName, lastName, age, courses } },
+      { $set: { firstName, lastName, age } },
       { useFindAndModify: false }
     );
     res.send(`${updatedStudent.firstName} updated`);
@@ -27,5 +27,17 @@ module.exports = {
     const { _id } = req.params;
     const deletedStudent = await studentsModel.findByIdAndDelete(_id);
     res.send(`${deletedStudent.firstName} deleted`);
+  },
+  assignCourse: async (req, res) => {
+    const { _id } = req.params;
+    const { course } = req.body;
+    const studentUpdated = await studentsModel.findByIdAndUpdate(
+      _id,
+      {
+        $push: { courses: course },
+      },
+      { useFindAndModify: false }
+    );
+    res.send(`${studentUpdated.firstName} updated`);
   },
 };

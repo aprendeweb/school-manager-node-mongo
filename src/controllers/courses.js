@@ -8,18 +8,18 @@ module.exports = {
     res.json(courses);
   },
   createOne: async (req, res) => {
-    const { name, teachers } = req.body;
-    const newCourse = new coursesModel({ name, teachers });
+    const { name } = req.body;
+    const newCourse = new coursesModel({ name });
     await newCourse.save();
     res.send(`${name} saved`);
   },
   updateOne: async (req, res) => {
     const { _id } = req.params;
-    const { name, teachers } = req.body;
+    const { name } = req.body;
     await coursesModel.findByIdAndUpdate(
       _id,
       {
-        $set: { name, teachers },
+        $set: { name },
       },
       { useFindAndModify: false }
     );
@@ -30,5 +30,29 @@ module.exports = {
     const removed = await coursesModel.findByIdAndDelete(_id);
     console.log(removed);
     res.send(`${removed.name} deleted from database`);
+  },
+  assignTeacher: async (req, res) => {
+    const { _id } = req.params;
+    const { teacher } = req.body;
+    const courseUpdated = await coursesModel.findByIdAndUpdate(
+      _id,
+      {
+        $push: { teachers: teacher },
+      },
+      { useFindAndModify: false }
+    );
+    res.send(`${courseUpdated.name} updated`);
+  },
+  removeTeacher: async (req, res) => {
+    const { _id } = req.params;
+    const { teacher } = req.body;
+    const courseUpdated = await coursesModel.findByIdAndUpdate(
+      _id,
+      {
+        $pull: { teachers: teacher },
+      },
+      { useFindAndModify: false }
+    );
+    res.send(`${courseUpdated.name} updated`);
   },
 };

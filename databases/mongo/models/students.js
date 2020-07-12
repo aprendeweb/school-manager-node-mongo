@@ -5,8 +5,12 @@ const schema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   age: { type: Number, required: true },
-  courses: [{ type: Schema.Types.ObjectId, refs: 'courses' }],
+  courses: [
+    { type: Schema.Types.ObjectId, ref: 'courses', autopopulate: true },
+  ],
 });
+
+schema.plugin(require('mongoose-autopopulate'));
 
 const model = mongoose.model('students', schema);
 module.exports = model;
