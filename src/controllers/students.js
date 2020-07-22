@@ -4,7 +4,10 @@ const {
 
 module.exports = {
   getAll: async (req, res) => {
-    const students = await studentsModel.find();
+    const students = await studentsModel
+      .find({ createdAt: { $exists: false } })
+      .sort({ age: -1 })
+      .skip(1);
     res.send(students);
   },
   createOne: async (req, res) => {
@@ -39,5 +42,23 @@ module.exports = {
       { useFindAndModify: false }
     );
     res.send(`${studentUpdated.firstName} updated`);
+  },
+  count: async (req, res) => {
+    const total = await studentsModel.find().count();
+    res.json({ total });
+  },
+  getByfirstName: async (req, res) => {
+    const { firstName } = req.params;
+    const studentsFound = await studentsModel.find({
+      firstName: { $eq: firstName },
+    });
+    res.json(studentsFound);
+  },
+  getStudentsAgeGreaterThan: async (req, res) => {
+    const { age } = req.query;
+    const studentsFound = await studentsModel
+      .find({ age: { $gt: age } })
+      .limit(2);
+    res.json(studentsFound);
   },
 };
