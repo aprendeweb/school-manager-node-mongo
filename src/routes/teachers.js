@@ -7,9 +7,11 @@ const {
   deleteOne,
   getAll,
   updateOne,
+  getCourses,
 } = require('../controllers/teachers');
 
 router.get('/', getAll);
+router.get('/getCourses', getCourses);
 router.post('/', validate(teacherSchema), createOne);
 router.put('/:_id', validate(teacherSchema), updateOne);
 router.delete('/:_id', deleteOne);

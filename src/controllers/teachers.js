@@ -1,5 +1,5 @@
 const {
-  mongo: { teachersModel },
+  mongo: { teachersModel, coursesModel },
 } = require('../../databases');
 
 module.exports = {
@@ -33,5 +33,22 @@ module.exports = {
     const { _id } = req.params;
     const teacherDeleted = await teachersModel.findByIdAndDelete(_id);
     res.send(`${teacherDeleted.firstName} deleted`);
+  },
+  getCourses: async (req, res) => {
+    const { name } = req.query;
+    coursesModel
+      .find({ teachers: { $not: { $size: 0 } } })
+      .populate({ path: 'teachers', match: { firstName: name } })
+      .exec((err, courses) => {
+        if (err) {
+          console.log(err);
+          return res.send(err.message);
+        }
+
+        const teacherCourses = courses.filter(
+          (course) => course.teachers.length > 0
+        );
+        res.json(teacherCourses);
+      });
   },
 };
