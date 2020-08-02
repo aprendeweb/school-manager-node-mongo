@@ -21,7 +21,7 @@ module.exports = {
     const { firstName, lastName, age } = req.body;
     const updatedStudent = await studentsModel.findByIdAndUpdate(
       _id,
-      { $set: { firstName, lastName, age } },
+      { $set: { firstName, lastName, age, updatedBy: req.userData._id } },
       { useFindAndModify: false }
     );
     res.send(`${updatedStudent.firstName} updated`);

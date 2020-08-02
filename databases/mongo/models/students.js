@@ -7,6 +7,7 @@ const schema = new Schema(
     lastName: { type: String, required: true },
     age: { type: Number, required: true },
     courses: [{ type: Schema.Types.ObjectId, ref: 'courses' }],
+    updatedBy: { type: Schema.Types.ObjectId },
   },
   { timestamps: true }
 );
