@@ -5,6 +5,9 @@ const courseRoutes = require('./src/routes/courses');
 const studentRoutes = require('./src/routes/students');
 const teacherRoutes = require('./src/routes/teachers');
 const userRoutes = require('./src/routes/users');
+const valitateAuth = require('./src/middlewares/validateAuth');
+
+app.use(valitateAuth);
 
 app.use(express.json());
 
